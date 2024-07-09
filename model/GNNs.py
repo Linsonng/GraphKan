@@ -438,6 +438,7 @@ class ZXKANGCN(torch.nn.Module):
 
     def forward(self,graph):
         x, edge_index, edge_weight = graph.x, graph.edge_index, graph.edge_attr  # the Forward path of model
+        x = F.relu(self.bn1(self.conv0(x, edge_index, edge_weight)))
         x = F.relu(self.bn1(self.conv1(x, edge_index, edge_weight)))
         x = F.relu(self.bn2(self.conv2(x, edge_index, edge_weight)))
         x = self.bn3(self.conv3(x, edge_index, edge_weight))
