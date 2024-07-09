@@ -20,6 +20,7 @@ from torch_geometric.nn.dense.linear import Linear
 from torch_geometric.nn.inits import zeros
 from torch_geometric.typing import OptTensor
 from torch_geometric.utils import get_laplacian
+#zx
 
 class kanChebConv(MessagePassing):
     def __init__(
