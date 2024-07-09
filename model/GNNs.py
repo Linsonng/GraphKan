@@ -418,3 +418,33 @@ class GCNNet768(torch.nn.Module):
         # x = self.fc(x)
         # x = torch.dropout(input=x,p=0.3,train=False)
         return F.log_softmax(x, dim=1)
+
+class ZXKANGCN(torch.nn.Module):
+    def __init__(self,graph,num_labels):
+        super(GCNNet768, self).__init__()
+        self.conv0 = kanChebConv(graph.num_features, 512, K=1)
+        self.conv1 = ChebConv(512, 512, K=1)
+        self.conv2 = ChebConv(512, 256, K=2)
+        self.conv3 = ChebConv(256, 128, K=3)
+        self.fc = torch.nn.Linear(128, num_labels)
+        # self.conv1 = ChebConv(graph.num_features, 384, K=1)
+        self.bn1 = BatchNorm(512)
+        # self.conv2 = ChebConv(384, 192, K=2)
+        self.bn2 = BatchNorm(256)
+        # self.conv3 = ChebConv(192, 96, K=3)
+        self.bn3 = BatchNorm(128)
+        # self.fc = torch.nn.Linear(96, )
+        print("Using GCNNet768, right now the num of labels is: ", num_labels)
+
+    def forward(self,graph):
+        x, edge_index, edge_weight = graph.x, graph.edge_index, graph.edge_attr  # the Forward path of model
+        x = F.relu(self.bn1(self.conv1(x, edge_index, edge_weight)))
+        x = F.relu(self.bn2(self.conv2(x, edge_index, edge_weight)))
+        x = self.bn3(self.conv3(x, edge_index, edge_weight))
+        x = self.fc(x)
+        # x = F.relu(self.conv1(x, edge_index, edge_weight))
+        # x = F.relu(self.conv2(x, edge_index, edge_weight))
+        # x = self.conv3(x, edge_index, edge_weight)
+        # x = self.fc(x)
+        # x = torch.dropout(input=x,p=0.3,train=False)
+        return F.log_softmax(x, dim=1)
