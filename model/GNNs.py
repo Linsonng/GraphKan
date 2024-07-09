@@ -421,7 +421,7 @@ class GCNNet768(torch.nn.Module):
 
 class ZXKANGCN(torch.nn.Module):
     def __init__(self,graph,num_labels):
-        super(GCNNet768, self).__init__()
+        super(ZXKANGCN, self).__init__()
         self.conv0 = kanChebConv(graph.num_features, 512, K=1)
         self.conv1 = ChebConv(512, 512, K=1)
         self.conv2 = ChebConv(512, 256, K=2)
